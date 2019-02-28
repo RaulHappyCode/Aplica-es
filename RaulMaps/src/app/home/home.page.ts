@@ -11,6 +11,10 @@ export class HomePage{
 
   @ViewChild('map') mapElement: ElementRef;
   map: any;
+  start = 'chicago, il';
+  end = 'chicago, il';
+  directionsService = new google.maps.DirectionsService;
+  directionsService = new google.maps.DirectionsRenderer;
   constructor(
     public navCtrl: NavController,
     privite platform: Platform
@@ -30,10 +34,27 @@ export class HomePage{
         center: happycode,
         disableDefaultUI: true
       });
+
+      this.directionsDisplay.setMap(this.map);
+
       var market = new google.maps.Marker({
         position: happycode,
         map: this.map,
         title: 'My Position!'
       });
     }
+    calculateAndDisplayRoute(){
+  this.directionsService.route({
+    origin: this.start,
+    destination: this.end,
+    travelModel: 'DRIVING'
+  },(response, status)=>{
+    if (status == 'OK')
+      this.directionsDisplay.setDirections(response);
+  } else{
+    window.alert('Directions request failed due to' + status);
   }
+});
+  }
+
+}
